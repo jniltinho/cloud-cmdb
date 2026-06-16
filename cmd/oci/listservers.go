@@ -7,7 +7,7 @@ import (
 	"os"
 
 	"github.com/jedib0t/go-pretty/v6/table"
-	ociapi "cloud-cmdb/internal/oci"
+	ociinternal "cloud-cmdb/internal/oci"
 	"github.com/spf13/cobra"
 )
 
@@ -85,7 +85,7 @@ func runListServers(cmd *cobra.Command, args []string) error {
 		return fmt.Errorf("cannot use --pdf together with --csv or --text")
 	}
 
-	servers, err := ociapi.ListServers(context.Background(), listServersCompartment, configFile, profile)
+	servers, err := ociinternal.ListServers(context.Background(), listServersCompartment, configFile, profile)
 	if err != nil {
 		return err
 	}
@@ -140,7 +140,7 @@ func runListServers(cmd *cobra.Command, args []string) error {
 	return printServerList(servers, listServersCSV, listServersText)
 }
 
-func printServerList(servers []ociapi.ServerInfo, asCSV, asText bool) error {
+func printServerList(servers []ociinternal.ServerInfo, asCSV, asText bool) error {
 	if asCSV {
 		w := csv.NewWriter(os.Stdout)
 

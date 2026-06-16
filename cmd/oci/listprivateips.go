@@ -9,7 +9,7 @@ import (
 	"time"
 
 	"github.com/jedib0t/go-pretty/v6/table"
-	ociapi "cloud-cmdb/internal/oci"
+	ociinternal "cloud-cmdb/internal/oci"
 	"github.com/oracle/oci-go-sdk/v65/core"
 	"github.com/spf13/cobra"
 )
@@ -120,14 +120,14 @@ func runListPrivateIPs(cmd *cobra.Command, args []string) error {
 
 	delay := time.Duration(delayMs) * time.Millisecond
 
-	opts := ociapi.ListPrivateIPsOptions{
+	opts := ociinternal.ListPrivateIPsOptions{
 		SubnetID:   subnetID,
 		Delay:      delay,
 		ConfigFile: configFile,
 		Profile:    profile,
 	}
 
-	ips, err := ociapi.ListPrivateIPs(context.Background(), opts)
+	ips, err := ociinternal.ListPrivateIPs(context.Background(), opts)
 	if err != nil {
 		if delayMs < 500 {
 			return fmt.Errorf("%w\n\nTip: for large subnets, try --delay 500 or --delay 1000", err)
@@ -175,14 +175,14 @@ func runPrivateIPsLegacy() error {
 
 	delay := time.Duration(delayMs) * time.Millisecond
 
-	opts := ociapi.ListPrivateIPsOptions{
+	opts := ociinternal.ListPrivateIPsOptions{
 		SubnetID:   subnetID,
 		Delay:      delay,
 		ConfigFile: configFile,
 		Profile:    profile,
 	}
 
-	ips, err := ociapi.ListPrivateIPs(context.Background(), opts)
+	ips, err := ociinternal.ListPrivateIPs(context.Background(), opts)
 	if err != nil {
 		if delayMs < 500 {
 			return fmt.Errorf("%w\n\nTip: for large subnets, try --delay 500 or --delay 1000", err)
@@ -196,14 +196,14 @@ func runPrivateIPsLegacy() error {
 func runListPrivateIPsSum(cmd *cobra.Command) error {
 	delay := time.Duration(delayMs) * time.Millisecond
 
-	opts := ociapi.ListPrivateIPsOptions{
+	opts := ociinternal.ListPrivateIPsOptions{
 		SubnetID:   subnetID,
 		Delay:      delay,
 		ConfigFile: configFile,
 		Profile:    profile,
 	}
 
-	ips, err := ociapi.ListPrivateIPs(context.Background(), opts)
+	ips, err := ociinternal.ListPrivateIPs(context.Background(), opts)
 	if err != nil {
 		if delayMs < 500 {
 			return fmt.Errorf("%w\n\nTip: for large subnets, try --delay 500 or --delay 1000", err)
@@ -211,7 +211,7 @@ func runListPrivateIPsSum(cmd *cobra.Command) error {
 		return err
 	}
 
-	sum, err := ociapi.GetSubnetSummary(context.Background(), subnetID, configFile, profile)
+	sum, err := ociinternal.GetSubnetSummary(context.Background(), subnetID, configFile, profile)
 	if err != nil {
 		return fmt.Errorf("failed to get subnet CIDR for --sum: %w", err)
 	}

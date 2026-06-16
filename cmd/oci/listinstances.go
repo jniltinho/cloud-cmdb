@@ -8,7 +8,7 @@ import (
 	"strings"
 
 	"github.com/jedib0t/go-pretty/v6/table"
-	ociapi "cloud-cmdb/internal/oci"
+	ociinternal "cloud-cmdb/internal/oci"
 	"github.com/spf13/cobra"
 )
 
@@ -141,13 +141,13 @@ func runListInstances(cmd *cobra.Command, args []string) error {
 		}
 	}
 
-	instances, err := ociapi.ListInstances(context.Background(), listInstancesCompartment, configFile, profile)
+	instances, err := ociinternal.ListInstances(context.Background(), listInstancesCompartment, configFile, profile)
 	if err != nil {
 		return err
 	}
 
 	if len(statusFilters) > 0 {
-		filtered := make([]ociapi.InstanceSummary, 0, len(instances))
+		filtered := make([]ociinternal.InstanceSummary, 0, len(instances))
 		for _, inst := range instances {
 			instStatus := strings.ToUpper(strings.TrimSpace(inst.Status))
 			for _, f := range statusFilters {
@@ -171,7 +171,7 @@ func runListInstances(cmd *cobra.Command, args []string) error {
 		}
 
 		if len(filters) > 0 {
-			filtered := make([]ociapi.InstanceSummary, 0, len(instances))
+			filtered := make([]ociinternal.InstanceSummary, 0, len(instances))
 			for _, inst := range instances {
 				nameLower := strings.ToLower(inst.Name)
 				for _, f := range filters {
@@ -275,7 +275,7 @@ func instanceColumnHeader(col instanceColumn) string {
 	}
 }
 
-func instanceColumnValue(inst ociapi.InstanceSummary, col instanceColumn) string {
+func instanceColumnValue(inst ociinternal.InstanceSummary, col instanceColumn) string {
 	switch col {
 	case instanceColName:
 		return inst.Name
@@ -323,7 +323,7 @@ func instanceColumnHeaders(columns []instanceColumn) []string {
 	return headers
 }
 
-func instanceColumnValues(inst ociapi.InstanceSummary, columns []instanceColumn) []string {
+func instanceColumnValues(inst ociinternal.InstanceSummary, columns []instanceColumn) []string {
 	row := make([]string, len(columns))
 	for i, col := range columns {
 		row[i] = instanceColumnValue(inst, col)
@@ -434,7 +434,7 @@ func parseInstanceColumnName(name string) (instanceColumn, bool) {
 	}
 }
 
-func printInstanceList(instances []ociapi.InstanceSummary, asCSV, asText bool, columns []instanceColumn) error {
+func printInstanceList(instances []ociinternal.InstanceSummary, asCSV, asText bool, columns []instanceColumn) error {
 	headers := instanceColumnHeaders(columns)
 
 	if asCSV {

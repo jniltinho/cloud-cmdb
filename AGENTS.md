@@ -158,7 +158,7 @@ Because `cmd/<provider>/` is `package <provider>` and `internal/<provider>/` is 
 
 | Importing file | Import path | Alias |
 |----------------|-------------|-------|
-| `cmd/oci/*.go` | `cloud-cmdb/internal/oci` | `ociapi` |
+| `cmd/oci/*.go` | `cloud-cmdb/internal/oci` | `ociinternal` |
 | `cmd/aws/*.go` | `cloud-cmdb/internal/aws` | `awsinternal` |
 | `cmd/azure/*.go` | `cloud-cmdb/internal/azure` | `azureinternal` |
 | `cmd/gcp/*.go` | `cloud-cmdb/internal/gcp` | `gcpinternal` |
@@ -185,7 +185,7 @@ Follow these steps exactly when adding a new cloud provider (e.g., `alibaba`):
    - Declare `var ListInstancesCmd = &cobra.Command{...}`
    - Implement `func runListInstances(...)` with output format logic
    - Implement the column system: `type instanceColumn int`, iota constants, `parseColumns()`, `columnHeaders()`, `columnValues()`
-   - Import `internal/alibaba` aliased as `alibabaapi` or similar
+   - Import `internal/alibaba` aliased as `alibabainternal`
 
 4. **Create `cmd/alibaba.go`** (`package cmd`):
    - Declare `var alibabaCmd = &cobra.Command{Use: "alibaba", ...}`

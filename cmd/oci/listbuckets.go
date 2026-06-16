@@ -7,7 +7,7 @@ import (
 	"os"
 
 	"github.com/jedib0t/go-pretty/v6/table"
-	ociapi "cloud-cmdb/internal/oci"
+	ociinternal "cloud-cmdb/internal/oci"
 	"github.com/spf13/cobra"
 )
 
@@ -88,7 +88,7 @@ func runListBuckets(cmd *cobra.Command, args []string) error {
 		return fmt.Errorf("cannot use --pdf together with --csv or --text")
 	}
 
-	entries, err := ociapi.ListBuckets(context.Background(), listBucketsCompartment, configFile, profile)
+	entries, err := ociinternal.ListBuckets(context.Background(), listBucketsCompartment, configFile, profile)
 	if err != nil {
 		return err
 	}
