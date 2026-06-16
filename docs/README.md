@@ -20,6 +20,7 @@ cloud-cmdb <provider> <subcommand> [flags]
 | `aws` | Amazon Web Services | [`aws-sdk-go-v2`](SDK_RESOURCES.md#aws) |
 | `azure` | Microsoft Azure | [`azure-sdk-for-go`](SDK_RESOURCES.md#azure) |
 | `gcp` | Google Cloud Platform | [`cloud.google.com/go/compute`](SDK_RESOURCES.md#gcp) |
+| `alibaba` | Alibaba Cloud (ECS) | [`alibabacloud-go/ecs-20140526/v4`](https://github.com/alibabacloud-go/ecs-20140526) |
 
 ---
 
@@ -93,6 +94,27 @@ Authentication uses **Application Default Credentials (ADC)**:
 |----------------|---------|
 | `--project` | GCP project ID |
 | `GOOGLE_CLOUD_PROJECT` | Project ID when flag is omitted |
+
+#### Alibaba Cloud
+
+Authentication uses **Access Key** credentials:
+
+1. `--access-key-id` / `--access-key-secret` flags
+2. `ALIBABA_CLOUD_ACCESS_KEY_ID` / `ALIBABA_CLOUD_ACCESS_KEY_SECRET` environment variables
+
+```bash
+export ALIBABA_CLOUD_ACCESS_KEY_ID=LTAI5t...
+export ALIBABA_CLOUD_ACCESS_KEY_SECRET=your-secret
+export ALIBABA_CLOUD_REGION=cn-hangzhou   # optional; default is cn-hangzhou
+```
+
+| Flag / env var | Purpose |
+|----------------|---------|
+| `--access-key-id` | Access Key ID |
+| `--access-key-secret` | Access Key Secret |
+| `--region` | ECS region (falls back to `ALIBABA_CLOUD_REGION`, then `cn-hangzhou`) |
+
+Create a RAM user with the `AliyunECSReadOnlyAccess` policy attached to limit credentials to read-only ECS API calls.
 
 ---
 
@@ -290,6 +312,42 @@ cloud-cmdb gcp list-instances --pdf --pdf-out gce-inventory.pdf
 
 ---
 
+### Alibaba Cloud
+
+```bash
+# List ECS instances in the default region (cn-hangzhou)
+cloud-cmdb alibaba list-instances
+
+# Specific region
+cloud-cmdb alibaba list-instances --region ap-southeast-1
+
+# Use explicit credentials
+cloud-cmdb alibaba list-instances --access-key-id LTAI5t... --access-key-secret xxx
+
+# Filter by name
+cloud-cmdb alibaba list-instances --contains=web-,api-
+
+# Filter by status
+cloud-cmdb alibaba list-instances --status=Running
+cloud-cmdb alibaba list-instances --status=Running,Stopped
+
+# Custom columns
+cloud-cmdb alibaba list-instances --columns="name,instance-id,type,status,private-ip"
+
+# Export to CSV
+cloud-cmdb alibaba list-instances --csv > ecs-instances.csv
+
+# PDF report
+cloud-cmdb alibaba list-instances --pdf --pdf-out alibaba-inventory.pdf
+
+# Plain text (pipe-friendly)
+cloud-cmdb alibaba list-instances --text | awk -F'\t' '$4 == "Running"'
+```
+
+**Alibaba Cloud `list-instances` columns:** `name`, `instance-id`, `type`, `status`, `private-ip`, `public-ip`, `os`, `zone`, `region`
+
+---
+
 ## Output Formats
 
 All `list-*` commands support the same four output modes. Flags are mutually exclusive pairwise checks — you cannot combine `--csv` and `--text`, for example.
@@ -336,6 +394,7 @@ Missing or empty field values are rendered as `-` in table and CSV output.
 | `aws` | `list-instances` | EC2 instances |
 | `azure` | `list-instances` | Virtual Machines |
 | `gcp` | `list-instances` | Compute Engine VM instances |
+| `alibaba` | `list-instances` | ECS (Elastic Compute Service) instances |
 
 Run `cloud-cmdb <provider> <command> --help` for the full flag list of any command.
 
@@ -354,6 +413,7 @@ cloud-cmdb/
 │   ├── aws.go              # AWS provider group registration
 │   ├── azure.go            # Azure provider group registration
 │   ├── gcp.go              # GCP provider group registration
+│   ├── alibaba.go          # Alibaba Cloud provider group registration
 │   ├── oci/                # OCI subcommands (package oci)
 │   │   ├── flags.go        # Shared flags and PDF helper
 │   │   ├── listbuckets.go
@@ -370,7 +430,10 @@ cloud-cmdb/
 │   ├── azure/              # Azure subcommands (package azure)
 │   │   ├── flags.go
 │   │   └── listinstances.go
-│   └── gcp/                # GCP subcommands (package gcp)
+│   ├── gcp/                # GCP subcommands (package gcp)
+│   │   ├── flags.go
+│   │   └── listinstances.go
+│   └── alibaba/            # Alibaba Cloud subcommands (package alibaba)
 │       ├── flags.go
 │       └── listinstances.go
 └── internal/
@@ -378,6 +441,7 @@ cloud-cmdb/
     ├── aws/                # AWS SDK wrappers
     ├── azure/              # Azure SDK wrappers
     ├── gcp/                # GCP SDK wrappers
+    ├── alibaba/            # Alibaba Cloud SDK wrappers
     └── pdf/                # PDF generation (maroto)
 ```
 
@@ -453,6 +517,8 @@ Build metadata (`Version`, `Commit`, `BuildDate`) is injected via `-ldflags` whe
 | `DefaultAzureCredential failed` | Not logged in | Run `az login` or set service principal env vars |
 | `could not find default credentials` (GCP) | ADC not configured | Run `gcloud auth application-default login` or set `GOOGLE_APPLICATION_CREDENTIALS` |
 | OCI `NotAuthenticated` | Invalid config/profile | Verify `~/.oci/config` and API key permissions |
+| Alibaba `InvalidAccessKeyId` | Wrong or expired Access Key | Re-generate the Access Key in the RAM console |
+| Alibaba `SignatureDoesNotMatch` | Wrong Access Key Secret | Check `ALIBABA_CLOUD_ACCESS_KEY_SECRET` value |
 | Empty results | Wrong scope | Check `--region`, `--compartment-id`, `--zone`, or `--resource-group` |
 | `unknown column` error | Typo in `--columns` | Run `--help` on the command for valid column names |
 

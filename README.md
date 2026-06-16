@@ -1,8 +1,8 @@
 # cloud-cmdb
 
-**Real-time cloud inventory from your terminal — one CLI, four providers.**
+**Real-time cloud inventory from your terminal — one CLI, five providers.**
 
-Stop juggling separate tools, portals, and spreadsheets to answer "what do we have running, and where?" `cloud-cmdb` queries live APIs across **OCI**, **AWS**, **Azure**, and **GCP**, then delivers clean inventories you can read, filter, export, and share.
+Stop juggling separate tools, portals, and spreadsheets to answer "what do we have running, and where?" `cloud-cmdb` queries live APIs across **OCI**, **AWS**, **Azure**, **GCP**, and **Alibaba Cloud**, then delivers clean inventories you can read, filter, export, and share.
 
 ---
 
@@ -28,8 +28,9 @@ Built for **platform engineers**, **SREs**, **security auditors**, and **FinOps*
 | Amazon Web Services | `aws` | `cloud-cmdb aws list-instances` |
 | Microsoft Azure | `azure` | `cloud-cmdb azure list-instances` |
 | Google Cloud | `gcp` | `cloud-cmdb gcp list-instances` |
+| Alibaba Cloud | `alibaba` | `cloud-cmdb alibaba list-instances` |
 
-OCI ships the richest command set today — instances, compartments, VCNs, subnets, OKE clusters, buckets, and more. AWS, Azure, and GCP cover compute inventory with the same output and filtering model.
+OCI ships the richest command set today — instances, compartments, VCNs, subnets, OKE clusters, buckets, and more. AWS, Azure, GCP, and Alibaba Cloud cover compute inventory with the same output and filtering model.
 
 ---
 
@@ -56,6 +57,11 @@ export AZURE_SUBSCRIPTION_ID=your-subscription-id
 export GOOGLE_CLOUD_PROJECT=your-project-id
 
 # OCI — ~/.oci/config (same as OCI CLI)
+
+# Alibaba Cloud — Access Key credentials
+export ALIBABA_CLOUD_ACCESS_KEY_ID=your-access-key-id
+export ALIBABA_CLOUD_ACCESS_KEY_SECRET=your-access-key-secret
+export ALIBABA_CLOUD_REGION=cn-hangzhou   # optional; default is cn-hangzhou
 ```
 
 **3. Run your first inventory**
@@ -65,6 +71,7 @@ export GOOGLE_CLOUD_PROJECT=your-project-id
 ./dist/cloud-cmdb oci list-instances
 ./dist/cloud-cmdb azure list-instances --contains=prod-
 ./dist/cloud-cmdb gcp list-instances --status=RUNNING --csv > inventory.csv
+./dist/cloud-cmdb alibaba list-instances --region ap-southeast-1
 ```
 
 That's it. No agent to deploy, no database to maintain.
@@ -124,6 +131,7 @@ Quick links:
 - [AWS commands](docs/README.md#aws)
 - [Azure commands](docs/README.md#azure)
 - [GCP commands](docs/README.md#gcp)
+- [Alibaba Cloud commands](docs/README.md#alibaba-cloud)
 - [Output formats](docs/README.md#output-formats)
 - [Command reference](docs/README.md#command-reference)
 - [Project structure](docs/README.md#project-structure)
