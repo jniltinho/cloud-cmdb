@@ -2,7 +2,7 @@
 
 Complete reference for installing, authenticating, and operating the `cloud-cmdb` CLI.
 
-**Quick navigation:** [Prerequisites](#prerequisites) · [Installation](#installation) · [Usage](#usage) · [Output formats](#output-formats) · [Command reference](#command-reference) · [Project structure](#project-structure) · [Build targets](#build-targets) · [Architecture](#architecture)
+**Quick navigation:** [Prerequisites](#prerequisites) · [Installation](#installation) · [Usage](#usage) · [Output formats](#output-formats) · [Command reference](#command-reference) · [Project structure](#project-structure) · [Build targets](#build-targets) · [Architecture](#architecture) · [SDK resources](SDK_RESOURCES.md)
 
 ---
 
@@ -16,10 +16,10 @@ cloud-cmdb <provider> <subcommand> [flags]
 
 | Namespace | Provider | SDK |
 |-----------|----------|-----|
-| `oci` | Oracle Cloud Infrastructure | `oci-go-sdk/v65` |
-| `aws` | Amazon Web Services | `aws-sdk-go-v2` |
-| `azure` | Microsoft Azure | `azure-sdk-for-go` |
-| `gcp` | Google Cloud Platform | `cloud.google.com/go/compute` |
+| `oci` | Oracle Cloud Infrastructure | [`oci-go-sdk/v65`](SDK_RESOURCES.md#oci) |
+| `aws` | Amazon Web Services | [`aws-sdk-go-v2`](SDK_RESOURCES.md#aws) |
+| `azure` | Microsoft Azure | [`azure-sdk-for-go`](SDK_RESOURCES.md#azure) |
+| `gcp` | Google Cloud Platform | [`cloud.google.com/go/compute`](SDK_RESOURCES.md#gcp) |
 
 ---
 
@@ -200,6 +200,8 @@ cloud-cmdb oci list-instances --pdf --pdf-out oci-instances.pdf
 ---
 
 ### AWS
+
+Official SDK links (developer guide, API reference, service docs): **[SDK_RESOURCES.md — AWS](SDK_RESOURCES.md#aws)**
 
 ```bash
 # List EC2 instances (uses default AWS credential chain)
@@ -459,5 +461,6 @@ Build metadata (`Version`, `Commit`, `BuildDate`) is injected via `-ldflags` whe
 ## Related
 
 - [Project README (overview)](../README.md)
+- [SDK_RESOURCES.md — official provider SDK documentation](SDK_RESOURCES.md)
 - [AGENTS.md — contributor guide](../AGENTS.md)
 - [LICENSE](../LICENSE)

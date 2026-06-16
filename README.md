@@ -127,6 +127,7 @@ Quick links:
 - [Output formats](docs/README.md#output-formats)
 - [Command reference](docs/README.md#command-reference)
 - [Project structure](docs/README.md#project-structure)
+- [SDK resources](docs/SDK_RESOURCES.md) — official provider SDK docs ([AWS](docs/SDK_RESOURCES.md#aws))
 
 ---
 
