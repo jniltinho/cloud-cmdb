@@ -13,6 +13,9 @@ cloud-cmdb.exe
 *.test
 *.out
 coverage.html
+coverage.*
+*.coverprofile
+profile.cov
 
 # Go workspace
 go.work
