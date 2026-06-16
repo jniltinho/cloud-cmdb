@@ -1,0 +1,47 @@
+# Build artifacts
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+/bin/
+/dist/
+cloud-cmdb
+cloud-cmdb.exe
+
+# Test binaries and coverage
+*.test
+*.out
+coverage.html
+
+# Go workspace
+go.work
+go.work.sum
+
+# Vendored dependencies
+vendor/
+
+# Generated output files (PDF reports produced by --pdf flag)
+*.pdf
+
+# IDEs and editors
+.idea/
+.vscode/
+*.swp
+*~
+*.sublime-project
+*.sublime-workspace
+
+# OS metadata
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Credentials and local config — never commit
+.env
+.env.local
+*.pem
+*.key
+
+# Logs
+*.log
